@@ -2,23 +2,25 @@
  * @param {number[]} nums
  * @return {number[][]}
  */
- var permute = function(nums) {
-    const res = [], path = [];
-    backtracking(nums, nums.length, []);
-    return res;
-    
-    function backtracking(n, k, used) {
-        if(path.length === k) {
-            res.push(Array.from(path));
-            return;
-        }
-        for (let i = 0; i < k; i++ ) {
-            if(used[i]) continue;
-            path.push(n[i]);
-            used[i] = true; // 同支
-            backtracking(n, k, used);
-            path.pop();
-            used[i] = false;
+
+ const helper = function(level,nums,res,list,used){
+    if(level === nums.length){
+        res.push([...list])
+        return
+    }
+    for(let val of nums){
+        if(!used[val]){
+           list.push(val)
+           used[val] = 1
+           helper(level+1,nums,res,list,used)
+           list.pop()
+           used[val] = 0
         }
     }
+}
+var permute = function(nums) {
+   const res = []
+   const used = {}
+   helper(0,nums,res,[],used)
+   return res
 };
